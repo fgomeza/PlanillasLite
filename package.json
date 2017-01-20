@@ -1,0 +1,23 @@
+{
+  "name": "planillas",
+  "main": "src/index.html",
+  "version":"0.1.0",
+
+  "window": {
+    "toolbar": true,
+    "icon": "assets/icon.png",
+    "min_width": 100,
+    "min_height": 1,
+    "resizable": true,
+    "frame": true
+  },
+
+  "maintainers": [
+    {
+      "name": "Francisco Gómez Astúa",
+      "email": "fgomeza25@gmail.com"
+    }
+  ],
+
+  "bugs": "mailto:fgomeza25@gmail.com"
+}
