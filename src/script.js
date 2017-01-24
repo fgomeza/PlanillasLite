@@ -8,6 +8,9 @@ app.controller('controller', ['$scope', '$log', function ($scope, $log) {
     var fs = require('fs');
     var stream = require('stream');
     var os = require('os');
+    var moment = require('moment');
+
+    moment.locale('es');
 
     $scope.openFile = function () {
         $scope.file = {};
@@ -39,11 +42,17 @@ app.controller('controller', ['$scope', '$log', function ($scope, $log) {
     var parseFile = function (fileContents) {
         var lines = fileContents.split(os.EOL);
 
+        // date
+        var dateString = lines[1].split('\t').slice(1).join(' ');
+        var date = moment(dateString, 'DD/MM/YYYY HH:mm');
+        $log.debug('date', date);
+        var when = { 'date': date.format('dddd, MMMM DD YYYY, h:mm A') };
+
         // headers
         var headers = lines[5].split('\t');
         headers.splice(1, 0, lines[7].split('\t')[1]);
         headers = headers.map(function(header){
-            return {'name':header,'selected':false};
+            return { 'name':header, 'selected':false };
         });
 
         // contents
@@ -54,6 +63,7 @@ app.controller('controller', ['$scope', '$log', function ($scope, $log) {
 
         $scope.headers = headers;
         $scope.matrix = matrix;
+        $scope.when = when;
     };
 
     var configureMenu = function () {
