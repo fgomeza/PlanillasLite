@@ -9,8 +9,6 @@ app.controller('controller', ['$scope', '$log', function ($scope, $log) {
     var stream = require('stream');
     var os = require('os');
 
-    $scope.str = 'Hello World!';
-
     $scope.openFile = function () {
         $scope.file = {};
         var input = $('<input>').attr('type','file');
@@ -32,7 +30,6 @@ app.controller('controller', ['$scope', '$log', function ($scope, $log) {
                 $scope.error = 'Error reading file';
             } else {
                 $scope.$apply(function() {
-                    //$log.info('File contents:\n', fileContents);
                     parseFile(fileContents);
                 });
             }
@@ -41,11 +38,21 @@ app.controller('controller', ['$scope', '$log', function ($scope, $log) {
 
     var parseFile = function (fileContents) {
         var lines = fileContents.split(os.EOL);
+
+        // headers
+        var headers = lines[5].split('\t');
+        headers.splice(1, 0, lines[7].split('\t')[1]);
+        headers = headers.map(function(header){
+            return {'name':header,'selected':false};
+        });
+
+        // contents
         lines = lines.slice(9);
         var matrix = lines.map(function(line){
             return line.split('\t');
         });
-        $log.debug(matrix);
+
+        $scope.headers = headers;
         $scope.matrix = matrix;
     };
 
@@ -71,6 +78,9 @@ app.controller('controller', ['$scope', '$log', function ($scope, $log) {
 
         win.maximize();
     };
+
+    var filePath = "/home/francisco/Documents/Code/planillas/assets/DATOS%20CMS%20PLANILLA.txt";
+    readFile(filePath);
     configureMenu();
 
 }]);

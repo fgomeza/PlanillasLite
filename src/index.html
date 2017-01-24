@@ -9,15 +9,17 @@
 		crossorigin="anonymous"></script>
 
 	<!-- bootstrap -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 	<!-- angular -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
 
+	<link rel="stylesheet" href="styles.css"/>
 	<script src="script.js"></script>
 </head>
+
 <body ng-controller="controller">
 	<div class="container-fluid">
 		<div class="row">
@@ -25,22 +27,32 @@
 				<input type="file" id="openFile" ng-hide="true" />
 				<button class="btn btn-primary" ng-click="openFile()">Load file</button>
 			</div>
-			<div class="col-xs-6">
-				<input type="text" ng-model="str">
-				<br/> {{str}}
-			</div>
+			<div class="col-xs-6"></div>
 		</div>
-		<div class="row">
+
+		<div class="row" ng-show="matrix">
 			<div class="panel panel-default">
-				<div class="panel-body">
-					<table class="table table-striped">
-						<tr ng-repeat="row in matrix">
-							<td ng-repeat="col in row track by $index">{{col}}</td>
+				<table class="table table-striped table-bordered table-responsive entries-table">
+					<thead>
+						<tr>
+							<th ng-repeat="header in headers">
+								<label class="checkbox-inline">
+									<input type="checkbox" ng-model="header.selected">{{header.name}}
+								</label>
+							</th>
 						</tr>
-					</table>
-				</div>
+					</thead>
+					<tbody>
+						<tr ng-repeat="row in matrix">
+							<td ng-class="{selected:headers[$index].selected}" ng-repeat="col in row track by $index">
+								{{col}}
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
+
 	</div>
 </body>
 </html>
