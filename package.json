@@ -1,8 +1,7 @@
 {
   "name": "planillas",
   "main": "src/index.html",
-  "version":"0.1.0",
-
+  "version": "0.1.0",
   "window": {
     "toolbar": true,
     "icon": "assets/icon.png",
@@ -11,13 +10,14 @@
     "resizable": true,
     "frame": true
   },
-
   "maintainers": [
     {
       "name": "Francisco Gómez Astúa",
       "email": "fgomeza25@gmail.com"
     }
   ],
-
-  "bugs": "mailto:fgomeza25@gmail.com"
+  "bugs": "mailto:fgomeza25@gmail.com",
+  "dependencies": {
+    "moment": "^2.17.1"
+  }
 }
