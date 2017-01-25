@@ -2,6 +2,7 @@
   "name": "planillas",
   "main": "src/index.html",
   "version": "0.1.0",
+  "chromium-args": "", /*--disable-devtools*/
   "window": {
     "toolbar": true,
     "icon": "assets/icon.png",

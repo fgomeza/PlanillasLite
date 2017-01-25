@@ -12,27 +12,30 @@ app.controller('controller', ['$scope', '$log', function ($scope, $log) {
 
     moment.locale('es');
 
+    var openFileDialog = function (save, callback) {
+
+    }
+
     $scope.openFile = function () {
-        $scope.file = {};
         var input = $('<input>').attr('type','file');
-        input.unbind('change');
         input.change(function (event) {
             readFile($(this).val());
+            input.unbind('change');
         });
         input.trigger('click');
     };
 
     var readFile = function (filePath) {
         $log.info('Loading file:', filePath);
-        //$scope.file.path;
 
         //var stream = fs.createReadStream(filePath, { 'encoding': 'utf8' });
         fs.readFile(filePath, 'utf8', function(err, fileContents) {
             if (err) {
-                $log.error('Error reading file', err);
-                $scope.error = 'Error reading file';
+                var errorMsg = 'Error reading file';
+                $log.error(errorMsg, err);
+                $scope.error = errorMsg;
             } else {
-                $scope.$apply(function() {
+                $scope.$apply(function () {
                     parseFile(fileContents);
                 });
             }
@@ -64,6 +67,38 @@ app.controller('controller', ['$scope', '$log', function ($scope, $log) {
         $scope.headers = headers;
         $scope.matrix = matrix;
         $scope.when = when;
+
+    };
+
+    $scope.exportFile = function () {
+        $scope.file = {};
+        var input = $('<input>').attr('type','file').attr('nwsaveas','datos_de_planilla.csv');
+        input.change(function (event) {
+            writeFile($(this).val());
+            input.unbind('change');
+        });
+        input.trigger('click');
+    };
+
+    var writeFile = function (filePath) {
+        $log.info('Writing file:', filePath);
+        var csvContents = getCSVcontents();
+
+        fs.writeFile(filePath, csvContents, function(e) {
+            if (err) {
+                var errorMsg = 'Error writing file';
+                $log.error(errorMsg, err);
+                $scope.error = errorMsg;
+            } else {
+                //$scope.$apply(function(){});
+            }
+        });
+    };
+
+    var getCSVcontents = function () {
+        return $scope.matrix.map(function(row) {
+            return row.join(',');
+        }).join('\n');
     };
 
     var configureMenu = function () {
