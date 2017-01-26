@@ -1,9 +1,15 @@
-var app = angular.module('app', []);
+var app = angular.module('app', ['inform', 'inform-exception', 'inform-http-exception', 'ngAnimate']);
+
+app.config(function(informProvider) {
+    informProvider.defaults({
+        type:'danger'
+    });
+});
 
 app.run(function () {
 });
 
-app.controller('controller', ['$scope', '$log', function ($scope, $log) {
+app.controller('controller', ['$scope', '$log', 'inform', function ($scope, $log, inform) {
     var nw = require('nw.gui');
     var fs = require('fs');
     var stream = require('stream');
@@ -11,6 +17,7 @@ app.controller('controller', ['$scope', '$log', function ($scope, $log) {
     var moment = require('moment');
 
     moment.locale('es');
+    inform.add('Hello!');
 
     var openFileDialog = function (save, callback) {
 
