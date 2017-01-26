@@ -2,7 +2,7 @@
   "name": "planillas",
   "main": "src/index.html",
   "version": "0.1.0",
-  "chromium-args": "", /*--disable-devtools*/
+  "chromium-args-debug": "--disable-devtools",
   "window": {
     "toolbar": true,
     "icon": "assets/icon.png",
@@ -19,6 +19,9 @@
   ],
   "bugs": "mailto:fgomeza25@gmail.com",
   "dependencies": {
+    "angular": "^1.6.1",
+    "angular-animate": "^1.6.1",
+    "angular-inform": "0.0.19",
     "moment": "^2.17.1"
   }
 }
