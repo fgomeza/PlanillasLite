@@ -1,15 +1,51 @@
 var app = angular.module('app', ['inform', 'inform-exception', 'inform-http-exception', 'ngAnimate']);
 
-app.config(function(informProvider) {
-    informProvider.defaults({
-        type:'danger'
-    });
-});
+app.config(['$provide', 'informProvider', function($provide, informProvider) {
+}]);
 
 app.run(function () {
 });
 
-app.controller('controller', ['$scope', '$log', 'inform', function ($scope, $log, inform) {
+app.factory('toast', ['inform', '$log', function (inform, $log) {
+
+    var error = function (text, e) {
+        $log.error(text, e);
+        inform.add(text, {type:'danger', ttl:-1});
+    };
+
+    var primary = function (text) {
+        inform.add(text, {type:'primary'});
+    };
+
+    var success = function (text) {
+        inform.add(text, {type:'success'});
+    };
+
+    var info = function (text) {
+        inform.add(text, {type:'info', ttl:10000});
+    };
+
+    var warning = function (text) {
+        $log.error.apply(null, arguments);
+        inform.add(text, {type:'warning', ttl:10000});
+    };
+
+    var debug = function (text) {
+        $log.debug.apply(null, arguments);
+        inform.add(text, {ttl:-1});
+    };
+
+    return {
+        error: error,
+        primary: primary,
+        success: success,
+        info: info,
+        warning: warning,
+        debug: debug
+    };
+}]);
+
+app.controller('controller', ['$scope', '$log', 'toast', function ($scope, $log, toast) {
     var nw = require('nw.gui');
     var fs = require('fs');
     var stream = require('stream');
@@ -17,7 +53,6 @@ app.controller('controller', ['$scope', '$log', 'inform', function ($scope, $log
     var moment = require('moment');
 
     moment.locale('es');
-    inform.add('Hello!');
 
     var openFileDialog = function (save, callback) {
 
@@ -27,7 +62,6 @@ app.controller('controller', ['$scope', '$log', 'inform', function ($scope, $log
         var input = $('<input>').attr('type','file');
         input.change(function (event) {
             readFile($(this).val());
-            input.unbind('change');
         });
         input.trigger('click');
     };
@@ -36,11 +70,9 @@ app.controller('controller', ['$scope', '$log', 'inform', function ($scope, $log
         $log.info('Loading file:', filePath);
 
         //var stream = fs.createReadStream(filePath, { 'encoding': 'utf8' });
-        fs.readFile(filePath, 'utf8', function(err, fileContents) {
-            if (err) {
-                var errorMsg = 'Error reading file';
-                $log.error(errorMsg, err);
-                $scope.error = errorMsg;
+        fs.readFile(filePath, 'utf8', function(error, fileContents) {
+            if (error) {
+                toast.error('Error reading file', error);
             } else {
                 $scope.$apply(function () {
                     parseFile(fileContents);
@@ -55,7 +87,6 @@ app.controller('controller', ['$scope', '$log', 'inform', function ($scope, $log
         // date
         var dateString = lines[1].split('\t').slice(1).join(' ');
         var date = moment(dateString, 'DD/MM/YYYY HH:mm');
-        $log.debug('date', date);
         var when = { 'date': date.format('dddd, MMMM DD YYYY, h:mm A') };
 
         // headers
@@ -82,7 +113,6 @@ app.controller('controller', ['$scope', '$log', 'inform', function ($scope, $log
         var input = $('<input>').attr('type','file').attr('nwsaveas','datos_de_planilla.csv');
         input.change(function (event) {
             writeFile($(this).val());
-            input.unbind('change');
         });
         input.trigger('click');
     };
@@ -91,14 +121,14 @@ app.controller('controller', ['$scope', '$log', 'inform', function ($scope, $log
         $log.info('Writing file:', filePath);
         var csvContents = getCSVcontents();
 
-        fs.writeFile(filePath, csvContents, function(e) {
-            if (err) {
-                var errorMsg = 'Error writing file';
-                $log.error(errorMsg, err);
-                $scope.error = errorMsg;
-            } else {
-                //$scope.$apply(function(){});
-            }
+        fs.writeFile(filePath, csvContents, function(error) {
+            $scope.$apply(function () {
+                if (error) {
+                    toast.error('Error writing file', error);
+                } else {
+                    toast.success('Success writing file!');
+                }
+            });
         });
     };
 

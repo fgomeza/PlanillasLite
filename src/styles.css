@@ -6,3 +6,8 @@
     margin-top: 8px;
     margin-bottom: 8px;
 }
+
+.inform-fixed {
+    top: initial;
+    bottom: 20px;
+}
