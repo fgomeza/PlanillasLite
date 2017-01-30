@@ -45,6 +45,14 @@ app.factory('toast', ['inform', '$log', function (inform, $log) {
     };
 }]);
 
+app.factory('$exceptionHandler', ['$log', function ($log) {
+    return function myExceptionHandler (exception, cause) {
+        $log.error(exception, cause);
+        sweetAlert('Oops!', 'Hubo un error en la aplicaci\u00F3n', 'error');
+        // TODO send email to developer
+    };
+}]);
+
 app.controller('controller', ['$scope', '$log', 'toast', function ($scope, $log, toast) {
     var nw = require('nw.gui');
     var fs = require('fs');
