@@ -169,7 +169,7 @@ app.controller('controller', ['$scope', '$log', 'toast', function ($scope, $log,
         win.maximize();
     };
 
-    var filePath = "/home/francisco/Documents/Code/planillas/assets/DATOS%20CMS%20PLANILLA.txt";
+    var filePath = "assets/DATOS%20CMS%20PLANILLA.txt";
     readFile(filePath);
     configureMenu();
 
